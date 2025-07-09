@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "./typescale.css";
+
+:root {
+  --bg-color: var(--color-gray-900);
+  --text-color: var(--color-white);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

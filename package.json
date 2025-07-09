@@ -10,7 +10,8 @@
     "format": "biome format --write",
     "lint": "biome lint --diagnostic-level error .",
     "lint:fix": "npm run lint --fix",
-    "lint:fix:unsafe": "npm run lint:fix --unsafe"
+    "lint:fix:unsafe": "npm run lint:fix --unsafe",
+    "generate:typescale": "typescale --tailwind -o src/styles/typescale.css"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -18,9 +19,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.1",
+    "@gud/typescale": "^2.0.2",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3",
     "vite": "^7.0.3",
     "vite-tsconfig-paths": "^5.1.4"
