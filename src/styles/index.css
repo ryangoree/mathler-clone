@@ -1,12 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap");
 @import "tailwindcss";
 @import "./typescale.css";
 
-:root {
-  --bg-color: var(--color-gray-900);
-  --text-color: var(--color-white);
+@theme {
+  /* Fonts */
+  --font-mono: "Source Code Pro", monospace;
+  --font-serif: "Source Serif 4", serif;
+
+  /* Colors */
+  --color-pearl: #fdfcfb;
+  --color-dune: #e2d1c3;
+  --color-stone: #cfbeb1;
+  --color-cedar: #c5aa93;
+  --color-goldenrod: #edd550;
+  --color-olive: #8a7e3a;
+  --color-peat: #585023;
+  --color-loam: #252108;
+  --color-terracotta: #8c4343;
+  --color-blush: #e8baba;
+  --color-ash-rose: #a17777;
+  --color-moss: #283726;
+  --color-evergreen: #486345;
+  --color-lichen: #6a6f6a;
+  --color-fern: #7ca177;
+  --color-seafoam: #c0e1bc;
+
+  /* Shadows */
+  --shadow-tile-inner: inset 0 0 16px 4px rgba(255, 255, 255, 0.66);
+  --shadow-tile:
+    1px 1px 1px rgb(from var(--color-cedar) r g b / 0.2), 2px 4px 16px
+    rgb(from var(--color-cedar) r g b / 0.25), var(--shadow-tile-inner);
+  --shadow-button:
+    0 1px 2px rgb(from var(--color-loam) r g b / 0.16), 0 4px 10px
+    rgb(from var(--color-loam) r g b / 0.11);
 }
 
+:root {
+  --bg: linear-gradient(135deg, var(--color-pearl) 0%, var(--color-dune) 100%);
+  --text-color: var(--color-moss);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: var(--color-gray-800);
+    --text-color: var(--color-white);
+  }
+} */
+
 body {
-  background-color: var(--bg-color);
+  background: var(--bg);
   color: var(--text-color);
+  font-family: var(--font-serif);
 }
