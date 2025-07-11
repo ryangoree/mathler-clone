@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
+import { operators } from "src/utils/math";
 
 // const problems = [
 //   { values: [119, "-", 41] },
@@ -16,7 +17,6 @@ import { useCallback, useEffect, useState } from "react";
 
 const rowCount = 6;
 const colCount = 6;
-const operators = ["+", "-", "*", "/"];
 
 function App() {
   const [completedRows, setCompletedRows] = useState<string[][]>([]);
