@@ -1,33 +1,33 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
-import { operators } from "src/utils/math";
+import { evaluate } from "src/utils/math";
 
-// const problems = [
-//   { values: [119, "-", 41] },
-//   { values: [21, "/", 7, "+", 9] },
-//   { values: [90, "/", 9, "+", 7] },
-//   { values: [18, "+", 6, "-", 3] },
-//   { values: [24, "*", 2, "-", 9] },
-//   { values: [112, "-", 47] },
-//   { values: [27, "*", 3, "-", 9] },
-//   { values: [28, "-", 3, "+", 7] },
-//   { values: [95, "/", 5, "+", 8] },
-//   { values: [132, "-", 59] },
-// ];
-
+const calculations = [
+  "119-41",
+  "21/7+9",
+  "90/9+7",
+  "18+6-3",
+  "24*2-9",
+  "112-47",
+  "27*3-9",
+  "28-3+7",
+  "95/5+8",
+  "132-59",
+] as const;
 const rowCount = 6;
 const colCount = 6;
+const operators = ["+", "-", "*", "/"];
 
 function App() {
+  const [currentCalc, setCurrentCalc] = useState({
+    index: 0,
+    value: calculations[0],
+  });
   const [completedRows, setCompletedRows] = useState<string[][]>([]);
   const [currentRow, setCurrentRow] = useState<string[]>([]);
-
-  const handleSubmit = useCallback(() => {
-    if (currentRow.length !== colCount) return;
-    if (completedRows.length === rowCount) return;
-    setCompletedRows((prev) => [...prev, currentRow]);
-    setCurrentRow([]);
-  }, [currentRow, completedRows]);
+  const [currentStatus, setCurrentStatus] = useState<
+    "incorrect" | "pending" | "complete"
+  >("pending");
 
   const handleInput = useCallback(
     (value: string) => {
@@ -40,7 +40,24 @@ function App() {
 
   const handleDelete = useCallback(() => {
     setCurrentRow((prev) => prev.slice(0, -1));
+    setCurrentStatus("pending");
   }, []);
+
+  const expectedResult = evaluate(currentCalc.value);
+  const currentResult =
+    currentRow.length === colCount ? evaluate(currentRow.join("")) : undefined;
+
+  const handleSubmit = useCallback(() => {
+    if (currentStatus === "complete") return;
+    if (currentRow.length !== colCount) return;
+    if (completedRows.length === rowCount) return;
+    if (currentResult !== expectedResult) {
+      setCurrentStatus("incorrect");
+      return;
+    }
+    setCompletedRows((prev) => [...prev, currentRow]);
+    setCurrentRow([]);
+  }, [currentStatus, currentRow, completedRows, currentResult, expectedResult]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -59,10 +76,17 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleSubmit, handleDelete, handleInput]);
 
+  // const handleNextCalculation = () => {
+  //   setCurrentCalcIndex((prev) =>
+  //     prev === calculations.length - 1 ? 0 : prev + 1,
+  //   );
+  //   setCurrentRow([]);
+  // };
+
   return (
-    <div className="flex justify-center min-h-screen items-center">
+    <div className="flex min-h-screen items-center justify-center">
       <div className="inline-flex">
-        <div className="flex flex-col shrink gap-4 items-stretch">
+        <div className="flex shrink flex-col items-stretch gap-4">
           <p className="text-h5 text-center">Find the hidden calculation</p>
 
           {/* Rows */}
@@ -75,20 +99,35 @@ function App() {
               return (
                 <div
                   key={`${rowIndex}:${values}`}
-                  className="flex gap-1 relative"
+                  className="relative flex gap-1"
                 >
                   {Array.from({ length: colCount }).map((_, colIndex) => {
+                    const value = values?.[colIndex];
                     return (
                       <NumberTile
-                        key={`${colIndex}:${values?.[colIndex]}`}
-                        value={values?.[colIndex]}
-                        status={isCurrentRow ? "active" : "inactive"}
+                        key={`${colIndex}:${value}`}
+                        value={value}
+                        active={isCurrentRow}
+                        status={
+                          isCurrentRow && currentStatus === "incorrect"
+                            ? "incorrect"
+                            : undefined
+                        }
                       />
                     );
                   })}
                   {isCurrentRow && (
-                    <div className="left-full top-1/2 -translate-y-1/2 ml-4 absolute text-h6 font-mono whitespace-nowrap">
-                      = 19
+                    <div
+                      className={classNames(
+                        "text-h6 absolute top-1/2 left-full ml-4 -translate-y-1/2 font-mono whitespace-nowrap",
+                        {
+                          "text-terracotta": currentStatus === "incorrect",
+                        },
+                      )}
+                    >
+                      ={" "}
+                      {currentStatus === "incorrect" && `${currentResult} =X= `}
+                      {expectedResult}{" "}
                     </div>
                   )}
                 </div>
@@ -96,7 +135,7 @@ function App() {
             })}
           </div>
 
-          {/* Buttons */}
+          {/* Input Buttons */}
           <div className="flex flex-col gap-1">
             <div className="flex gap-1">
               {Array.from({ length: 10 }).map((_, i) => {
@@ -110,6 +149,7 @@ function App() {
                 );
               })}
             </div>
+
             <div className="flex gap-1">
               {operators.map((operator) => (
                 <InputButton
@@ -118,18 +158,21 @@ function App() {
                   onClick={handleInput}
                 />
               ))}
+
               <button
                 type="button"
-                className="flex gap-2 items-center justify-center h-11 text-terracotta bg-blush/33 border border-ash-rose/30 rounded pl-4 pr-3"
+                className="text-terracotta bg-blush/33 border-ash-rose/30 flex h-11 items-center justify-center gap-2 rounded border pr-3 pl-4"
                 onClick={handleDelete}
+                title="Delete last input"
               >
                 <svg
+                  role="graphics-symbol"
                   width="7"
                   height="13"
                   viewBox="0 0 7 13"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="stroke-terracotta"
+                  className="stroke-terracotta mt-px"
                 >
                   <path
                     d="M6 11.5L1 6.5L6 1.5"
@@ -138,7 +181,7 @@ function App() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                delete
+                <span className="mb-px">delete</span>
               </button>
             </div>
           </div>
@@ -146,8 +189,12 @@ function App() {
           {/* Submit Button */}
           <button
             type="button"
-            className="flex items-center justify-center h-14 bg-fern text-white font-semibold text-lg rounded-lg shadow-button"
+            className="bg-fern shadow-button flex h-14 items-center justify-center rounded-lg text-lg font-semibold text-white"
             onClick={handleSubmit}
+            disabled={
+              currentRow.length !== colCount ||
+              completedRows.length === rowCount
+            }
           >
             Submit
           </button>
@@ -156,6 +203,8 @@ function App() {
     </div>
   );
 }
+
+export default App;
 
 export function InputButton({
   value,
@@ -170,14 +219,14 @@ export function InputButton({
     <button
       type="button"
       className={classNames(
-        "flex items-center justify-center h-11 rounded font-mono text-lg grow",
+        "flex h-11 grow items-center justify-center rounded font-mono text-lg",
         {
-          "bg-seafoam/33 border border-fern/30 text-evergreen":
+          "bg-seafoam/33 border-fern/30 text-evergreen border":
             status === "active",
           "bg-dune": status === "eliminated",
-          "bg-goldenrod border border-olive/30 text-peat":
+          "bg-goldenrod border-olive/30 text-peat border":
             status === "wrong-position",
-          "bg-fern text-white border border-evergreen/30": status === "correct",
+          "bg-fern border-evergreen/30 border text-white": status === "correct",
         },
       )}
       onClick={() => onClick(value)}
@@ -189,19 +238,22 @@ export function InputButton({
 
 export function NumberTile({
   value = "",
-  status = "inactive",
+  active = false,
+  status,
 }: {
   value?: string;
-  status?: "active" | "inactive" | "incorrect" | "wrong-position" | "correct";
+  active?: boolean;
+  status?: "incorrect" | "eliminated" | "wrong-position" | "correct";
 }) {
   return (
     <div
       className={classNames(
-        "flex items-center justify-center w-14 h-11 bg-white/33 rounded font-mono text-lg font-bold",
+        "flex h-11 w-14 items-center justify-center rounded font-mono text-lg font-bold bg-white/33",
+        active
+          ? "shadow-tile"
+          : "shadow-tile-inner border-stone/75 border opacity-50",
         {
-          "shadow-tile": status === "active",
-          "opacity-50 shadow-tile-inner border border-stone/75":
-            status === "inactive",
+          "text-terracotta border-terracotta border": status === "incorrect",
         },
       )}
     >
@@ -209,5 +261,3 @@ export function NumberTile({
     </div>
   );
 }
-
-export default App;
