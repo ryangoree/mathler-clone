@@ -9,6 +9,8 @@ export function usePulse(duration = 1000) {
   const [isPulsing, setIsPulsing] = useState(false);
   const resetTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  useEffect(() => () => clearTimeout(resetTimeout.current), []);
+
   const reset = useCallback(() => {
     if (resetTimeout.current) {
       clearTimeout(resetTimeout.current);
@@ -22,8 +24,6 @@ export function usePulse(duration = 1000) {
     setTimeout(() => setIsPulsing(true), 0);
     resetTimeout.current = setTimeout(reset, duration);
   }, [reset, duration]);
-
-  useEffect(() => () => clearTimeout(resetTimeout.current), []);
 
   return { isPulsing, pulse, reset };
 }
