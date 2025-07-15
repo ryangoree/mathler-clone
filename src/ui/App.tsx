@@ -1,31 +1,16 @@
-import {
-  DynamicWidget, useUserUpdateRequest
-} from "@dynamic-labs/sdk-react-core";
-import { SecondaryButton } from "src/ui/base/SecondaryButton";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { Game } from "src/ui/game/Game";
+import { ProfileButton } from "src/ui/game/ProfileButton";
 
 export function App() {
-  const { updateUser } = useUserUpdateRequest();
-
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       {/* Header */}
-      <div className="flex w-full py-4 px-6">
-        <h1 className="font-bold text-h6">Mathler</h1>
-        <div className="flex gap-4 items-center ml-auto">
-          <SecondaryButton
-            onClick={() => {
-              updateUser({
-                metadata: {
-                  gamesPlayed: 1,
-                },
-              });
-            }}
-            className="!text-caption !h-10"
-          >
-            Update info
-          </SecondaryButton>
+      <div className="flex w-full px-6 py-4">
+        <h1 className="text-h6 font-bold">Mathler</h1>
+        <div className="ml-auto flex items-center gap-4">
           <DynamicWidget />
+          <ProfileButton />
         </div>
       </div>
 
