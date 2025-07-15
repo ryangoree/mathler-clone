@@ -5,6 +5,8 @@ import { useTempToggle } from "src/ui/base/hooks/useTempToggle";
 import { Modal } from "src/ui/base/Modal";
 import { PrimaryButton } from "src/ui/base/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/SecondaryButton";
+import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
+import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
 import { InputTile, type InputTileStatus } from "src/ui/game/InputTile";
 import { getAnswerStatus, type InputStatus } from "src/ui/game/utils/status";
@@ -43,6 +45,8 @@ export function Game() {
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [showEarlySubmitWarning, earlySubmitToggle] = useTempToggle(false, 800);
   const [isEndGameModalOpen, setIsEndGameModalOpen] = useState(false);
+  const gameHistory = useGameHistory();
+  const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
 
   // Derived state
 
@@ -85,6 +89,30 @@ export function Game() {
       return;
     }
 
+    // Update game status
+    if (isCorrect) {
+      setIsEndGameModalOpen(true);
+      setGameStatus("won");
+      updateGameHistory?.((prev) => ({
+        ...prev,
+        gamesPlayed: prev.gamesPlayed + 1,
+        gamesWon: prev.gamesWon + 1,
+        currentWinStreak: prev.currentWinStreak + 1,
+        bestWinStreak: Math.max(prev.bestWinStreak, prev.currentWinStreak + 1),
+      }));
+      return;
+    }
+    if (attempts.length >= maxAttempts - 1) {
+      setIsEndGameModalOpen(true);
+      setGameStatus("lost");
+      updateGameHistory?.((prev) => ({
+        ...prev,
+        gamesPlayed: prev.gamesPlayed + 1,
+        currentWinStreak: 0,
+      }));
+      return;
+    }
+
     // Move to the next attempt
     setAttempts((prev) => [
       ...prev,
@@ -94,20 +122,14 @@ export function Game() {
       },
     ]);
     setCurrentAnswer("");
-
-    // Update game status
-    if (isCorrect) {
-      setIsEndGameModalOpen(true);
-      setGameStatus("won");
-      console.log("Success!");
-      return;
-    }
-    if (attempts.length >= maxAttempts - 1) {
-      setIsEndGameModalOpen(true);
-      setGameStatus("lost");
-      return;
-    }
-  }, [attempts, currentAnswer, gameStatus, targetEquation, earlySubmitToggle]);
+  }, [
+    attempts,
+    currentAnswer,
+    gameStatus,
+    targetEquation,
+    earlySubmitToggle,
+    updateGameHistory,
+  ]);
 
   const handleInput = useCallback(
     (value: string) => {

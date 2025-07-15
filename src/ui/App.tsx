@@ -1,19 +1,12 @@
 import {
-  DynamicWidget,
-  useDynamicContext,
-  useUserUpdateRequest,
-  useUserWallets,
+  DynamicWidget, useUserUpdateRequest
 } from "@dynamic-labs/sdk-react-core";
 import { SecondaryButton } from "src/ui/base/SecondaryButton";
 import { Game } from "src/ui/game/Game";
 
 export function App() {
-  const userWallets = useUserWallets();
   const { updateUser } = useUserUpdateRequest();
-  const { user } = useDynamicContext();
 
-  console.log("user:", user);
-  console.log("userWallets:", userWallets);
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}

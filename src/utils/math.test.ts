@@ -104,7 +104,6 @@ describe("evaluate", () => {
       try {
         error = evaluate(expression);
       } catch (e) {
-        // console.error(e);
         error = e;
       }
       assert(error instanceof Error, `Expected error for "${expression}"`);
