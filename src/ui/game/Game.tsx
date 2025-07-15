@@ -2,7 +2,7 @@ import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
 import { parseFixed } from "@gud/math";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
-import { useTempToggle } from "src/ui/base/hooks/useTempToggle";
+import { usePulse } from "src/ui/base/hooks/usePulse";
 import { Modal } from "src/ui/base/Modal";
 import { PrimaryButton } from "src/ui/base/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/SecondaryButton";
@@ -37,17 +37,21 @@ const initialEquationIndex = Math.floor(Math.random() * equations.length);
 
 export function Game() {
   // State
+  const gameHistory = useGameHistory();
+  const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
   const [targetEquation, setTargetEquation] = useState({
     index: initialEquationIndex,
     value: equations[initialEquationIndex]!,
   });
-  const [gameStatus, setGameStatus] = useState<GameStatus>("won");
+  const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
-  const [showEarlySubmitWarning, earlySubmitToggle] = useTempToggle(false, 800);
   const [isEndGameModalOpen, setIsEndGameModalOpen] = useState(true);
-  const gameHistory = useGameHistory();
-  const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
+  const {
+    isPulsing: isEarlySubmitWarningVisible,
+    pulse: triggerEarlySubmitWarning,
+    reset: resetEarlySubmitWarning,
+  } = usePulse();
 
   // Derived state
 
@@ -74,7 +78,7 @@ export function Game() {
   const handleSubmit = useCallback(() => {
     if (gameStatus !== "playing") return;
     if (currentAnswer.length !== targetEquation.value.length) {
-      earlySubmitToggle.toggle();
+      triggerEarlySubmitWarning();
       return;
     }
 
@@ -128,7 +132,7 @@ export function Game() {
     currentAnswer,
     gameStatus,
     targetEquation,
-    earlySubmitToggle,
+    triggerEarlySubmitWarning,
     updateGameHistory,
   ]);
 
@@ -137,18 +141,18 @@ export function Game() {
       if (gameStatus !== "playing") return;
       if (currentAnswer.length === targetEquation.value.length) return;
       if (Number.isNaN(+value) && !operators.includes(value)) return;
-      earlySubmitToggle.reset();
+      resetEarlySubmitWarning();
       setCurrentAnswer((prev) => `${prev}${value}`);
     },
-    [gameStatus, currentAnswer, targetEquation, earlySubmitToggle],
+    [gameStatus, currentAnswer, targetEquation, resetEarlySubmitWarning],
   );
 
   const handleDelete = useCallback(() => {
     if (gameStatus !== "playing" && gameStatus !== "invalid") return;
-    earlySubmitToggle.reset();
+    resetEarlySubmitWarning();
     setCurrentAnswer((prev) => prev.slice(0, -1));
     setGameStatus("playing");
-  }, [gameStatus, earlySubmitToggle]);
+  }, [gameStatus, resetEarlySubmitWarning]);
 
   function handlePlayAgain() {
     setIsEndGameModalOpen(false);
@@ -204,8 +208,8 @@ export function Game() {
                 <div
                   key={`${rowIndex}:${values}`}
                   className={classNames("relative flex gap-1 rounded", {
-                    "animate-pop !transition-none":
-                      isCurrentRow && showEarlySubmitWarning,
+                    "animate-jump-pulse !transition-none":
+                      isCurrentRow && isEarlySubmitWarningVisible,
                   })}
                 >
                   {Array.from({ length: targetEquation.value.length }).map(

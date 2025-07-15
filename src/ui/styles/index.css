@@ -12,7 +12,7 @@
   --color-dune: #e2d1c3;
   --color-stone: #cfbeb1;
   --color-cedar: #c5aa93;
-  --color-goldenrod: #edd550;
+  --color-goldenrod: #ffb54c;
   --color-olive: #8a7e3a;
   --color-peat: #585023;
   --color-loam: #252108;
@@ -54,7 +54,7 @@
   --ease-out-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Animation */
-  --animate-pop:
+  --animate-jump-pulse:
     jump 400ms var(--ease-out-bounce), ring-pulse 800ms var(--ease-out-quart);
 
   @keyframes jump {
@@ -72,7 +72,7 @@
     }
     100% {
       outline: 1px solid transparent;
-      outline-offset: 12px;
+      outline-offset: 20px;
     }
   }
 }
