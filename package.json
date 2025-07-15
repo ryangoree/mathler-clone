@@ -16,9 +16,12 @@
     "generate:typescale": "typescale --tailwind -o src/styles/typescale.css"
   },
   "dependencies": {
+    "@dynamic-labs/ethereum": "^4.23.0",
+    "@dynamic-labs/sdk-react-core": "^4.23.0",
     "classnames": "^2.5.1",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "viem": "^2.31.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.1",
