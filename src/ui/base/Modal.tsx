@@ -57,7 +57,7 @@ export function Modal({
       {/** biome-ignore lint/a11y/useKeyWithClickEvents: stopping propagation */}
       {/** biome-ignore lint/a11y/noStaticElementInteractions: stopping propagation */}
       <div
-        className="w-full max-w-md space-y-4 rounded-lg bg-(image:--bg) p-6 shadow-[2px_4px_20px_rgb(from_var(--color-moss)_r_g_b_/_0.2)]"
+        className="w-full max-w-sm space-y-4 rounded-lg bg-(image:--bg) p-6 shadow-[2px_4px_20px_rgb(from_var(--color-moss)_r_g_b_/_0.2)]"
         onClick={(e) => {
           e.stopPropagation();
         }}

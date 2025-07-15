@@ -1,4 +1,5 @@
 import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
+import { parseFixed } from "@gud/math";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import { useTempToggle } from "src/ui/base/hooks/useTempToggle";
@@ -40,11 +41,11 @@ export function Game() {
     index: initialEquationIndex,
     value: equations[initialEquationIndex]!,
   });
-  const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
+  const [gameStatus, setGameStatus] = useState<GameStatus>("won");
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [showEarlySubmitWarning, earlySubmitToggle] = useTempToggle(false, 800);
-  const [isEndGameModalOpen, setIsEndGameModalOpen] = useState(false);
+  const [isEndGameModalOpen, setIsEndGameModalOpen] = useState(true);
   const gameHistory = useGameHistory();
   const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
 
@@ -289,7 +290,7 @@ export function Game() {
           {gameStatus === "lost" && (
             <p className="text-terracotta text-center">
               The solution was:{" "}
-              <span className="font-mono font-medium text-h5">
+              <span className="text-h5 font-mono font-medium">
                 {targetEquation.value}
               </span>
             </p>
@@ -349,11 +350,41 @@ export function Game() {
           <p>You got it! Congratulations 🎉</p>
         ) : (
           <>
-            <p>You ran out of attempts. The solution was:</p>
-            <p className="font-mono font-medium text-h5 flex items-center justify-center rounded bg-dune/50 border-stone border p-3 text-terracotta">
+            <p>Good try! The solution was:</p>
+            <p className="text-h5 bg-dune/50 border-stone text-terracotta flex items-center justify-center rounded border p-3 font-mono font-medium">
               {targetEquation.value}
             </p>
           </>
+        )}
+        {gameHistory && (
+          <ul className="border-stone flex flex-col gap-2 rounded border p-3">
+            <li className="flex items-center justify-between">
+              <span className="text-lichen">Games played:</span>
+              <span className="font-mono text-h6">
+                {gameHistory.gamesPlayed}
+              </span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="text-lichen">Win %:</span>
+              <span className="font-mono text-h6">
+                {parseFixed(gameHistory.gamesWon)
+                  .div(gameHistory.gamesPlayed, 0)
+                  .format({ percent: true, decimals: 1 })}
+              </span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="text-lichen">Current Win Streak:</span>
+              <span className="font-mono text-h6">
+                {gameHistory.currentWinStreak}
+              </span>
+            </li>
+            <li className="flex justify-between">
+              <span className="text-lichen">Best Win Streak:</span>
+              <span className="font-mono text-h6">
+                {gameHistory.bestWinStreak}
+              </span>
+            </li>
+          </ul>
         )}
       </Modal>
     </>
