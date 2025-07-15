@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { type PropsWithChildren, useCallback, useEffect } from "react";
-import { XIcon } from "src/components/icons/XIcon";
+import { XIcon } from "src/ui/base/icons/XIcon";
 
 export interface ModalProps {
   isOpen: boolean;

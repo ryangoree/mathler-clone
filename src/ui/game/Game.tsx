@@ -1,14 +1,14 @@
+import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
-import { InputButton } from "src/components/InputButton";
-import { InputTile, type InputTileStatus } from "src/components/InputTile";
-import { ChevronLeftIcon } from "src/components/icons/ChevronLeftIcon";
-import { Modal } from "src/components/Modal";
-import { PrimaryButton } from "src/components/PrimaryButton";
-import { SecondaryButton } from "src/components/SecondaryButton";
-import { useTempToggle } from "src/hooks/useTempToggle";
+import { useTempToggle } from "src/ui/base/hooks/useTempToggle";
+import { Modal } from "src/ui/base/Modal";
+import { PrimaryButton } from "src/ui/base/PrimaryButton";
+import { SecondaryButton } from "src/ui/base/SecondaryButton";
+import { InputButton } from "src/ui/game/InputButton";
+import { InputTile, type InputTileStatus } from "src/ui/game/InputTile";
+import { getAnswerStatus, type InputStatus } from "src/ui/game/utils/status";
 import { evaluate } from "src/utils/math";
-import { getAnswerStatus, type InputStatus } from "src/utils/status";
 
 interface Attempt {
   answer: string;

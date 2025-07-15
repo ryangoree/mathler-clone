@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import type { InputStatus } from "src/utils/status";
+import type { InputStatus } from "src/ui/game/utils/status";
 
 export function InputButton({
   value,

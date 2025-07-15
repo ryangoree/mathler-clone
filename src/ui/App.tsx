@@ -4,8 +4,8 @@ import {
   useUserUpdateRequest,
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
-import { SecondaryButton } from "src/components/SecondaryButton";
-import { Game } from "src/Game";
+import { SecondaryButton } from "src/ui/base/SecondaryButton";
+import { Game } from "src/ui/game/Game";
 
 export function App() {
   const userWallets = useUserWallets();

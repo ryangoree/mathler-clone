@@ -1,11 +1,11 @@
-import type { IconProps } from "src/components/icons/types";
+import type { IconProps } from "src/ui/base/icons/types";
 
-export function XIcon({ title, ...props }: IconProps) {
+export function ChevronLeftIcon({ title, ...props }: IconProps) {
   return (
     <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
+      width="7"
+      height="13"
+      viewBox="0 0 7 13"
       fill="none"
       stroke="currentColor"
       xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +14,7 @@ export function XIcon({ title, ...props }: IconProps) {
     >
       <title>{title}</title>
       <path
-        d="M1 11L11 1M1 1L11 11"
+        d="M6 11.5L1 6.5L6 1.5"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
