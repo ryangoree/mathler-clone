@@ -19,20 +19,56 @@
   --color-terracotta: #8c4343;
   --color-blush: #e8baba;
   --color-ash-rose: #a17777;
+  --color-lichen: #6a6f6a;
   --color-moss: #283726;
   --color-evergreen: #486345;
-  --color-lichen: #6a6f6a;
+  --color-fern-dark: #60845c;
   --color-fern: #7ca177;
+  --color-fern-light: #85b380;
   --color-seafoam: #c0e1bc;
 
   /* Shadows */
   --shadow-tile-inner: inset 0 0 16px 4px rgba(255, 255, 255, 0.66);
-  --shadow-tile:
+  --shadow-tile-outer:
     1px 1px 1px rgb(from var(--color-cedar) r g b / 0.2), 2px 4px 16px
-    rgb(from var(--color-cedar) r g b / 0.25), var(--shadow-tile-inner);
+    rgb(from var(--color-cedar) r g b / 0.25);
+  --shadow-tile: var(--shadow-tile-outer), var(--shadow-tile-inner);
   --shadow-button:
-    0 1px 2px rgb(from var(--color-loam) r g b / 0.16), 0 4px 10px
-    rgb(from var(--color-loam) r g b / 0.11);
+    0 1px 2px rgb(from var(--color-loam) r g b / 0.2), 2px 4px 16px
+    rgb(from var(--color-loam) r g b / 0.25);
+  --shadow-button-primary:
+    var(--shadow-button), inset 0 -2px 6px 2px
+    rgb(from var(--color-moss) r g b / 0.1), inset 0 -1px 1px 1px
+    rgb(from var(--color-moss) r g b / 0.15), inset 0 1px 1px
+    rgb(from var(--color-moss) r g b / 0.15), inset 0 1px 1px 1px
+    rgb(from var(--color-seafoam) r g b / 0.4);
+
+  /* Easing */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Animation */
+  --animate-pop:
+    jump 400ms var(--ease-out-bounce), ring-pulse 800ms var(--ease-out-quart);
+
+  @keyframes jump {
+    50% {
+      transform: scale(1.05) translate(0, -4px);
+    }
+  }
+  @keyframes ring-pulse {
+    0% {
+      outline: 1px solid var(--color-terracotta);
+      outline-offset: 0;
+    }
+    20% {
+      outline: 1px solid var(--color-terracotta);
+    }
+    100% {
+      outline: 1px solid transparent;
+      outline-offset: 12px;
+    }
+  }
 }
 
 :root {
@@ -40,15 +76,16 @@
   --text-color: var(--color-moss);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: var(--color-gray-800);
-    --text-color: var(--color-white);
-  }
-} */
-
 body {
   background: var(--bg);
   color: var(--text-color);
   font-family: var(--font-serif);
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.8;
 }

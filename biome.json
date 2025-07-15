@@ -6,6 +6,13 @@
     "useIgnoreFile": true,
     "defaultBranch": "main"
   },
+  "linter": {
+    "rules": {
+      "style": {
+        "noNonNullAssertion": "info"
+      }
+    }
+  },
   "formatter": {
     "indentStyle": "space"
   },

@@ -31,6 +31,7 @@ const terminalRegex = concatPatterns(
  * unary operators).
  */
 function evaluateTerminal(expression: string) {
+  if (!expression) return 0;
   if (!expression.match(terminalRegex)) {
     throw new Error(`Invalid expression: ${expression}`);
   }
@@ -164,11 +165,20 @@ const parenthesesRegex = /\(([^()]+)\)/g;
  * operator precedence.
  */
 export function evaluate(expression: string): number {
-  expression = expression.replace(removableCharsRegex, "");
-  while (parenthesesRegex.test(expression)) {
-    expression = expression.replace(parenthesesRegex, (_, inner) =>
-      String(evaluateOperand(inner)),
-    );
+  try {
+    expression = expression.replace(removableCharsRegex, "");
+    while (parenthesesRegex.test(expression)) {
+      expression = expression.replace(parenthesesRegex, (_, inner) =>
+        String(evaluateOperand(inner)),
+      );
+    }
+    return evaluateOperand(expression);
+  } catch (error) {
+    // Wrap in a new error to prevent deep stack traces that include all
+    // evaluation steps.
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(new Error(message));
+
+    return NaN;
   }
-  return evaluateOperand(expression);
 }
