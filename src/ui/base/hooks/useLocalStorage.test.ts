@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { useLocalStorage } from "src/ui/base/hooks/useLocalStorage";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 
 describe("useLocalStorage", () => {
   beforeEach(() => {
@@ -48,6 +48,9 @@ describe("useLocalStorage", () => {
   });
 
   it("falls back to initialValue if localStorage contains invalid JSON", () => {
+    const consoleMock = vi.spyOn(console, "error").mockImplementation(() => {});
+    onTestFinished(() => consoleMock.mockRestore());
+
     localStorage.setItem("key", "{ invalid json }");
     const { result } = renderHook(() => useLocalStorage("key", "fallback"));
     const [value] = result.current;

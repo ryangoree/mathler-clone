@@ -9,5 +9,8 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   test: {
     environment: "jsdom",
+    coverage: {
+      include: ["src/**/*"],
+    },
   },
 });

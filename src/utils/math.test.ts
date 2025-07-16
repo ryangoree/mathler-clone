@@ -1,5 +1,5 @@
 import { evaluate } from "src/utils/math";
-import { assert, describe, expect, it } from "vitest";
+import { assert, describe, expect, it, onTestFinished, vi } from "vitest";
 
 describe("evaluate", () => {
   it("evaluates single numbers", () => {
@@ -100,20 +100,15 @@ describe("evaluate", () => {
       "1+(2*3",
     ];
 
-    // Suppress console errors for invalid expressions
-    const consoleError = console.error;
-    console.error = () => {};
+    const consoleMock = vi.spyOn(console, "error").mockImplementation(() => {});
+    onTestFinished(() => consoleMock.mockRestore());
 
-    try {
-      for (const expression of invalidExpressions) {
-        const result = evaluate(expression);
-        assert(
-          Number.isNaN(result),
-          `Expected NaN for "${expression}", got: ${result}`,
-        );
-      }
-    } finally {
-      console.error = consoleError;
+    for (const expression of invalidExpressions) {
+      const result = evaluate(expression);
+      assert(
+        Number.isNaN(result),
+        `Expected NaN for "${expression}", got: ${result}`,
+      );
     }
   });
 });
