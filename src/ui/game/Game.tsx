@@ -46,7 +46,7 @@ export function Game() {
   const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
-  const [isEndGameModalOpen, setIsEndGameModalOpen] = useState(true);
+  const [isEndGameModalOpen, setIsEndGameModalOpen] = useState(false);
   const {
     isPulsing: isEarlySubmitWarningVisible,
     pulse: triggerEarlySubmitWarning,
@@ -372,7 +372,7 @@ export function Game() {
               <span className="text-lichen">Win %:</span>
               <span className="font-mono text-h6">
                 {parseFixed(gameHistory.gamesWon)
-                  .div(gameHistory.gamesPlayed, 0)
+                  .div(gameHistory.gamesPlayed || 1, 0)
                   .format({ percent: true, decimals: 1 })}
               </span>
             </li>
