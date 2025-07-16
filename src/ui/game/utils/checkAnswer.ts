@@ -1,8 +1,13 @@
+import type { InputStatus } from "src/ui/game/types";
 import { evaluate } from "src/utils/math";
 
-export type InputStatus = "correct" | "present" | "absent";
-
-export interface AnswerStatus {
+export function checkAnswer({
+  answer,
+  targetEquation,
+}: {
+  answer: string;
+  targetEquation: string;
+}): {
   /**
    * Whether the answer and expected equation evaluate to the same number.
    */
@@ -16,15 +21,7 @@ export interface AnswerStatus {
    * equation.
    */
   statuses: InputStatus[];
-}
-
-export function getAnswerStatus({
-  answer,
-  targetEquation,
-}: {
-  answer: string;
-  targetEquation: string;
-}): AnswerStatus {
+} {
   // Short-circuit if the answer is exactly the target equation
   if (answer === targetEquation) {
     return {

@@ -10,7 +10,8 @@ import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
 import { InputTile, type InputTileStatus } from "src/ui/game/InputTile";
-import { getAnswerStatus, type InputStatus } from "src/ui/game/utils/status";
+import type { InputStatus } from "src/ui/game/types";
+import { checkAnswer } from "src/ui/game/utils/checkAnswer";
 import { evaluate } from "src/utils/math";
 
 interface Attempt {
@@ -38,7 +39,7 @@ const initialEquationIndex = Math.floor(Math.random() * equations.length);
 export function Game() {
   // State
   const gameHistory = useGameHistory();
-  const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
+  const { updateGameHistory } = useUpdateGameHistory();
   const [targetEquation, setTargetEquation] = useState({
     index: initialEquationIndex,
     value: equations[initialEquationIndex]!,
@@ -54,10 +55,7 @@ export function Game() {
   } = usePulse();
 
   // Derived state
-
   const expectedResult = evaluate(targetEquation.value);
-
-  // Initialize button statuses
   const buttonStatusMap = new Map<string, InputStatus | undefined>();
   if (gameStatus === "won") {
     for (const char of targetEquation.value) {
@@ -83,7 +81,7 @@ export function Game() {
     }
 
     // Check the submitted answer
-    const { isEqual, isCorrect, statuses } = getAnswerStatus({
+    const { isEqual, isCorrect, statuses } = checkAnswer({
       answer: currentAnswer,
       targetEquation: targetEquation.value,
     });
@@ -200,7 +198,7 @@ export function Game() {
               const values = isCurrentRow
                 ? currentAnswer
                 : attempts[rowIndex]?.answer;
-              const { statuses, isCorrect } = getAnswerStatus({
+              const { statuses, isCorrect } = checkAnswer({
                 answer: values || "",
                 targetEquation: targetEquation.value,
               });

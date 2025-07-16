@@ -4,3 +4,5 @@ export interface GameHistory {
   currentWinStreak: number;
   bestWinStreak: number;
 }
+
+export type InputStatus = "correct" | "present" | "absent";

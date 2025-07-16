@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import type { InputStatus } from "src/ui/game/utils/status";
+import type { InputStatus } from "src/ui/game/types";
 
 export type InputTileStatus = InputStatus | "invalid";
 
