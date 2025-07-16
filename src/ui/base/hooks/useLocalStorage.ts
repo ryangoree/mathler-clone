@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Updater, UpdaterFn } from "src/ui/base/types";
+import type { UpdaterFn, UpdateValue } from "src/ui/base/types";
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(initialValue);
@@ -14,7 +14,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   }, [key]);
 
   const update = useCallback(
-    (value: Updater<T>) => {
+    (value: UpdateValue<T>) => {
       setValue((prev) => {
         const newValue =
           typeof value === "function" ? (value as UpdaterFn<T>)(prev) : value;

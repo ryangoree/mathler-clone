@@ -3,7 +3,7 @@ import {
   useUserUpdateRequest,
 } from "@dynamic-labs/sdk-react-core";
 import { useMutation } from "@tanstack/react-query";
-import type { UpdaterFn } from "src/ui/base/types";
+import type { UpdateValue } from "src/ui/base/types";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { useLocalGameHistory } from "src/ui/game/hooks/useLocalGameHistory";
 import type { GameHistory } from "src/ui/game/types";
@@ -16,9 +16,7 @@ export function useUpdateGameHistory() {
 
   const { mutate, status } = useMutation({
     mutationKey: ["updateGameHistory"],
-    mutationFn: async (
-      newGameHistory: GameHistory | UpdaterFn<GameHistory>,
-    ) => {
+    mutationFn: async (newGameHistory: UpdateValue<GameHistory>) => {
       if (!gameHistory) return;
 
       const updatedGameHistory =
@@ -26,11 +24,10 @@ export function useUpdateGameHistory() {
           ? newGameHistory(gameHistory)
           : { ...gameHistory, ...newGameHistory };
 
-      if (isLoggedIn) {
-        await updateUser({ metadata: updatedGameHistory });
-      }
-
       setLocalGameHistory(updatedGameHistory);
+      if (isLoggedIn) {
+        return updateUser({ metadata: updatedGameHistory });
+      }
     },
   });
 

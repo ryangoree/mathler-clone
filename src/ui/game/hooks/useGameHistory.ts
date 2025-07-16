@@ -1,28 +1,27 @@
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { useEffect } from "react";
 import {
-  initialGameHistory,
-  useLocalGameHistory,
-} from "src/ui/game/hooks/useLocalGameHistory";
-
-export interface GameHistory {
-  gamesPlayed: number;
-  gamesWon: number;
-  currentWinStreak: number;
-  bestWinStreak: number;
-}
+  useDynamicContext,
+  useUserUpdateRequest,
+} from "@dynamic-labs/sdk-react-core";
+import { useEffect } from "react";
+import { useLocalGameHistory } from "src/ui/game/hooks/useLocalGameHistory";
+import type { GameHistory } from "src/ui/game/types";
 
 export function useGameHistory() {
   const { user } = useDynamicContext();
+  const { updateUser } = useUserUpdateRequest();
   const [gameHistory, setGameHistory] = useLocalGameHistory();
 
   useEffect(() => {
-    const profileHistory = user?.metadata as GameHistory;
-    console.log("Profile:", user);
-    if (profileHistory) {
-      setGameHistory({ ...initialGameHistory, ...profileHistory });
+    if (!user) return;
+    const userHistory = user.metadata as GameHistory;
+
+    // Sync based on games played
+    if (userHistory.gamesPlayed > gameHistory.gamesPlayed) {
+      setGameHistory((prev) => ({ ...prev, ...userHistory }));
+    } else if (userHistory.gamesPlayed < gameHistory.gamesPlayed) {
+      updateUser({ metadata: gameHistory });
     }
-  }, [user, setGameHistory]);
+  }, [user, gameHistory, setGameHistory, updateUser]);
 
   return gameHistory;
 }
