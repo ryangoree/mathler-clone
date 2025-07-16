@@ -1,8 +1,9 @@
 # Mathler Clone w/ Login via Dynamic SDK
 
 A clone of the [Mathler](https://mathler.com) game, built with React and
-TypeScript, including a profile system using the Dynamic SDK, allowing users to
-save their progress based on their wallet address.
+TypeScript, including a profile system using the [Dynamic
+SDK](https://www.dynamic.xyz/docs/react-sdk/overview), allowing users to save
+their progress based on their wallet address.
 
 ## Notes
 
