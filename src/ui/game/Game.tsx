@@ -10,7 +10,7 @@ import { Spinner } from "src/ui/base/Spinner";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
-import { InputTile, type InputTileStatus } from "src/ui/game/InputTile";
+import { InputTileRow } from "src/ui/game/InputTileRow";
 import type { InputStatus } from "src/ui/game/types";
 import { checkAnswer } from "src/ui/game/utils/checkAnswer";
 import { evaluate } from "src/utils/math";
@@ -197,58 +197,23 @@ export function Game() {
         <div className="flex shrink flex-col items-stretch gap-4">
           <p className="text-h5 text-center">Find the hidden equation</p>
 
-          {/* Attempt Rows */}
+          {/* Input Rows */}
           <div className="flex flex-col gap-1">
             {Array.from({ length: maxAttempts }).map((_, rowIndex) => {
               const isCurrentRow = rowIndex === attempts.length;
-              const values = isCurrentRow
+              const value = isCurrentRow
                 ? currentAnswer
                 : attempts[rowIndex]?.answer;
-              const { statuses, isCorrect } = checkAnswer({
-                answer: values || "",
-                targetEquation: targetEquation.value,
-              });
               return (
-                <div
-                  key={`${rowIndex}:${values}`}
-                  className={classNames("relative flex gap-1 rounded", {
-                    "animate-jump-pulse transition-none!":
-                      isCurrentRow && isEarlySubmitWarningVisible,
-                  })}
-                >
-                  {Array.from({ length: targetEquation.value.length }).map(
-                    (_, colIndex) => {
-                      const value = values?.[colIndex] || "";
-                      let status: InputTileStatus | undefined =
-                        statuses[colIndex];
-                      if (isCurrentRow) {
-                        if (gameStatus === "invalid") {
-                          status = "invalid";
-                        } else if (isCorrect) {
-                          status = "correct";
-                        }
-                      }
-                      return (
-                        <InputTile
-                          key={`${colIndex}:${value}`}
-                          value={value}
-                          active={gameStatus !== "won" && isCurrentRow}
-                          status={status}
-                        />
-                      );
-                    },
-                  )}
-                  {isCurrentRow && (
-                    <div className="text-h6 absolute left-full ml-4 flex h-full items-center gap-2 font-mono whitespace-nowrap">
-                      = {expectedResult}{" "}
-                      {gameStatus === "invalid" && (
-                        <span className="text-terracotta text-p">
-                          (Must equal {expectedResult})
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
+                <InputTileRow
+                  key={`${rowIndex}:${value}`}
+                  expectedResult={expectedResult}
+                  targetEquation={targetEquation.value}
+                  value={value}
+                  active={isCurrentRow && gameStatus !== "won"}
+                  invalid={gameStatus === "invalid"}
+                  showEarlySubmitWarning={isEarlySubmitWarningVisible}
+                />
               );
             })}
           </div>
