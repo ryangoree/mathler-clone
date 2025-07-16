@@ -44,7 +44,7 @@ export function InputTileRow({
         );
       })}
       {active && (
-        <div className="text-h6 absolute left-full ml-4 flex h-full items-center gap-2 font-mono whitespace-nowrap">
+        <div className="text-h6 absolute left-full ml-4 hidden h-full items-center gap-2 font-mono whitespace-nowrap md:flex">
           = {expectedResult}{" "}
           {invalid && (
             <span className="text-terracotta text-p">

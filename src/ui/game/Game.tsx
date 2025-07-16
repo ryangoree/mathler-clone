@@ -212,7 +212,15 @@ export function Game() {
           ref={gameContainerRef}
           className="flex shrink flex-col items-stretch gap-4"
         >
-          <p className="text-h5 text-center">Find the hidden equation</p>
+          <div className="text-h5 text-center">
+            <p>Find the hidden equation</p>
+            <p className="md:hidden font-mono">
+              <span className="bg-dune/50 border border-stone/80 rounded px-3">
+                ?
+              </span>{" "}
+              = <span>{expectedResult}</span>
+            </p>
+          </div>
 
           {/* Input Rows */}
           <div className="flex flex-col gap-1">
@@ -291,6 +299,11 @@ export function Game() {
 
           {gameStatus === "playing" || gameStatus === "invalid" ? (
             <div className="flex flex-col gap-2">
+              {gameStatus === "invalid" && (
+                <p className="text-terracotta text-h6 text-center md:hidden">
+                  Must equal {expectedResult}
+                </p>
+              )}
               {/* Submit Button */}
               <PrimaryButton
                 type="button"
