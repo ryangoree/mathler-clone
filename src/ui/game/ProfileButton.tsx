@@ -6,10 +6,10 @@ import {
 } from "@dynamic-labs/sdk-react-core";
 import { parseFixed } from "@gud/math";
 import { useState } from "react";
+import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
+import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { ProfileIcon } from "src/ui/base/icons/ProfileIcon";
 import { Modal } from "src/ui/base/Modal";
-import { PrimaryButton } from "src/ui/base/PrimaryButton";
-import { SecondaryButton } from "src/ui/base/SecondaryButton";
 import { formatAddress } from "src/ui/base/utils/formatAddress";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 
@@ -42,7 +42,9 @@ export function ProfileButton() {
               buttonContainerClassName="w-full"
               buttonClassName="w-full"
             >
-              <PrimaryButton className="w-full">Log in</PrimaryButton>
+              <PrimaryButton className="w-full" as="span">
+                Log in
+              </PrimaryButton>
             </DynamicConnectButton>
           )
         }

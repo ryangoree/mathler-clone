@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { type PropsWithChildren, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { XIcon } from "src/ui/base/icons/XIcon";
 
 export interface ModalProps {
@@ -17,7 +17,7 @@ export function Modal({
   children,
   actions,
   className,
-}: PropsWithChildren<ModalProps>) {
+}: React.PropsWithChildren<ModalProps>) {
   function handleClose(e: React.MouseEvent) {
     if (e.target && "blur" in e.target && typeof e.target.blur === "function") {
       e.target.blur();
@@ -71,7 +71,7 @@ export function Modal({
           <h2 className="text-h4 leading-h4 grow font-bold">{title}</h2>
           <button
             type="button"
-            className="border-stone hover:border-cedar hover:bg-stone/50 flex size-10 items-center justify-center rounded-full border p-1 transition duration-150 hover:scale-110"
+            className="border-stone hover:shadow-tile-inner flex size-10 items-center justify-center rounded-full border p-1 transition duration-150 hover:scale-110"
             title="Close modal"
             onClick={handleClose}
           >

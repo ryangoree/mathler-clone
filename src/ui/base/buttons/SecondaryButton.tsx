@@ -1,17 +1,16 @@
 import classNames from "classnames";
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonProps, ButtonTag } from "src/ui/base/buttons/types";
 
-export interface PrimaryButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
-
-export function SecondaryButton({
+export function SecondaryButton<T extends ButtonTag = "button">({
+  as: tag = "button" as T,
   className,
   children,
   ...rest
-}: PrimaryButtonProps) {
+}: ButtonProps<T>) {
+  const Tag = tag as React.ElementType;
   return (
-    <button
-      type="button"
+    <Tag
+      type={tag === "button" ? "button" : undefined}
       className={classNames(
         "border-stone shadow-button-secondary hover:not-disabled:bg-pearl/50 hover:not-disabled:border-stone/80 flex h-12 items-center justify-center gap-2 rounded-lg border px-6 text-lg font-medium transition duration-100",
         className,
@@ -19,6 +18,6 @@ export function SecondaryButton({
       {...rest}
     >
       {children}
-    </button>
+    </Tag>
   );
 }

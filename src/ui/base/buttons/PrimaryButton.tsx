@@ -1,17 +1,16 @@
 import classNames from "classnames";
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonProps, ButtonTag } from "src/ui/base/buttons/types";
 
-export interface PrimaryButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
-
-export function PrimaryButton({
+export function PrimaryButton<T extends ButtonTag = "button">({
+  as: tag = "button" as T,
   className,
   children,
   ...rest
-}: PrimaryButtonProps) {
+}: ButtonProps<T>) {
+  const Tag = tag as React.ElementType;
   return (
-    <button
-      type="button"
+    <Tag
+      type={tag === "button" ? "button" : undefined}
       className={classNames(
         "bg-fern shadow-button-primary hover:not-disabled:bg-fern-dark flex h-12 items-center justify-center rounded-lg px-6 text-lg font-semibold text-white transition duration-100",
         className,
@@ -19,6 +18,6 @@ export function PrimaryButton({
       {...rest}
     >
       {children}
-    </button>
+    </Tag>
   );
 }

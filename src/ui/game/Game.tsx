@@ -2,10 +2,10 @@ import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
 import { parseFixed } from "@gud/math";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
+import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
+import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { usePulse } from "src/ui/base/hooks/usePulse";
 import { Modal } from "src/ui/base/Modal";
-import { PrimaryButton } from "src/ui/base/PrimaryButton";
-import { SecondaryButton } from "src/ui/base/SecondaryButton";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
@@ -353,7 +353,7 @@ export function Game() {
         ) : (
           <>
             <p>Good try! The solution was:</p>
-            <p className="text-h5 bg-dune/50 border-stone text-terracotta flex items-center justify-center rounded border p-3 font-mono font-medium">
+            <p className="text-h5 bg-blush/30 text-terracotta flex items-center justify-center rounded p-3 font-mono font-medium">
               {targetEquation.value}
             </p>
           </>
