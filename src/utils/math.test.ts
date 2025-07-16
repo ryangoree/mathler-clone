@@ -77,7 +77,7 @@ describe("evaluate", () => {
     expect(evaluate("26 << 2")).toBe(26 << 2);
   });
 
-  it("throws error for invalid expressions", () => {
+  it("Returns NaN for invalid expressions", () => {
     const invalidExpressions = [
       "++12",
       "--12",
@@ -99,14 +99,21 @@ describe("evaluate", () => {
       "12<<<34",
       "1+(2*3",
     ];
-    for (const expression of invalidExpressions) {
-      let error: unknown;
-      try {
-        error = evaluate(expression);
-      } catch (e) {
-        error = e;
+
+    // Suppress console errors for invalid expressions
+    const consoleError = console.error;
+    console.error = () => {};
+
+    try {
+      for (const expression of invalidExpressions) {
+        const result = evaluate(expression);
+        assert(
+          Number.isNaN(result),
+          `Expected NaN for "${expression}", got: ${result}`,
+        );
       }
-      assert(error instanceof Error, `Expected error for "${expression}"`);
+    } finally {
+      console.error = consoleError;
     }
   });
 });
