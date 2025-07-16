@@ -1,69 +1,22 @@
-# React + TypeScript + Vite
+# Mathler Clone w/ Login via Dynamic SDK
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clone of the [Mathler](https://mathler.com) game, built with React and
+TypeScript, including a profile system using the Dynamic SDK, allowing users to
+save their progress based on their wallet address.
 
-Currently, two official plugins are available:
+## Notes
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Since I'm coming from a DeFi startup where I built web3 tooling (e.g.,
+[Drift](https://delvtech.github.io/drift/)), and UI's dense with blockchain
+interactions (e.g., [Hyperdrive
+Frontend](https://github.com/delvtech/hyperdrive-frontend)), I decided to focus
+less on crypto-related features in this project. Instead, I spent more time on
+the design, UX, and keeping dependencies minimal to showcase skills that aren't
+as visible in my recent work.
 
-## Expanding the ESLint configuration
+## Design
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+I started the design in Figma, aiming for something clean and peaceful, and
+finished the details in code with extra attention to the details.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+![Figma Screenshot](./public/figma.png)
