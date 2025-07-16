@@ -65,7 +65,6 @@
   @keyframes ring-pulse {
     0% {
       outline: 1px solid var(--color-terracotta);
-      outline-offset: 0;
     }
     20% {
       outline: 1px solid var(--color-terracotta);

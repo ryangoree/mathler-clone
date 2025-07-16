@@ -1,6 +1,5 @@
 import {
   DynamicConnectButton,
-  DynamicUserProfile,
   useDynamicContext,
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
@@ -15,9 +14,9 @@ import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 
 export function ProfileButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const gameHistory = useGameHistory();
   const { handleLogOut } = useDynamicContext();
   const [wallet] = useUserWallets();
+  const gameHistory = useGameHistory();
   return (
     <>
       <SecondaryButton
@@ -49,7 +48,6 @@ export function ProfileButton() {
           )
         }
       >
-        <DynamicUserProfile />
         <ul className="border-stone flex flex-col gap-2 rounded border p-3">
           {wallet?.address && (
             <li className="flex items-center justify-between">

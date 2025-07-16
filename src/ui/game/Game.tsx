@@ -96,7 +96,7 @@ export function Game() {
     if (isCorrect) {
       setIsEndGameModalOpen(true);
       setGameStatus("won");
-      updateGameHistory?.((prev) => ({
+      updateGameHistory((prev) => ({
         ...prev,
         gamesPlayed: prev.gamesPlayed + 1,
         gamesWon: prev.gamesWon + 1,
@@ -108,7 +108,7 @@ export function Game() {
     if (attempts.length >= maxAttempts - 1) {
       setIsEndGameModalOpen(true);
       setGameStatus("lost");
-      updateGameHistory?.((prev) => ({
+      updateGameHistory((prev) => ({
         ...prev,
         gamesPlayed: prev.gamesPlayed + 1,
         currentWinStreak: 0,
@@ -136,6 +136,7 @@ export function Game() {
 
   const handleInput = useCallback(
     (value: string) => {
+      value = value.trim();
       if (gameStatus !== "playing") return;
       if (currentAnswer.length === targetEquation.value.length) return;
       if (Number.isNaN(+value) && !operators.includes(value)) return;
@@ -278,7 +279,10 @@ export function Game() {
               {/* Delete Button */}
               <button
                 type="button"
-                className="text-terracotta bg-blush/33 border-ash-rose/30 hover:shadow-tile-inner flex h-11 items-center justify-center gap-2 rounded border pr-3 pl-4 transition-all duration-100 hover:not-active:scale-105"
+                className={classNames(
+                  "text-terracotta bg-blush/33 border-ash-rose/30 flex h-11 items-center justify-center gap-2 rounded border pr-3 pl-4",
+                  "hover:shadow-tile-inner transition-all duration-100 hover:not-active:scale-105",
+                )}
                 onClick={handleDelete}
                 title="Delete last input"
               >
@@ -362,13 +366,13 @@ export function Game() {
           <ul className="border-stone flex flex-col gap-2 rounded border p-3">
             <li className="flex items-center justify-between">
               <span className="text-lichen">Games played:</span>
-              <span className="font-mono text-h6">
+              <span className="text-h6 font-mono">
                 {gameHistory.gamesPlayed}
               </span>
             </li>
             <li className="flex items-center justify-between">
               <span className="text-lichen">Win %:</span>
-              <span className="font-mono text-h6">
+              <span className="text-h6 font-mono">
                 {parseFixed(gameHistory.gamesWon)
                   .div(gameHistory.gamesPlayed || 1, 0)
                   .format({ percent: true, decimals: 1 })}
@@ -376,13 +380,13 @@ export function Game() {
             </li>
             <li className="flex items-center justify-between">
               <span className="text-lichen">Current Win Streak:</span>
-              <span className="font-mono text-h6">
+              <span className="text-h6 font-mono">
                 {gameHistory.currentWinStreak}
               </span>
             </li>
             <li className="flex justify-between">
               <span className="text-lichen">Best Win Streak:</span>
-              <span className="font-mono text-h6">
+              <span className="text-h6 font-mono">
                 {gameHistory.bestWinStreak}
               </span>
             </li>

@@ -19,7 +19,7 @@ export function Modal({
   className,
 }: React.PropsWithChildren<ModalProps>) {
   function handleClose(e: React.MouseEvent) {
-    if (e.target && "blur" in e.target && typeof e.target.blur === "function") {
+    if ("blur" in e.target && typeof e.target.blur === "function") {
       e.target.blur();
     }
     onClose();
@@ -36,18 +36,16 @@ export function Modal({
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   return (
     <div
       role="dialog"
       className={classNames(
-        "pointer-events-none fixed inset-0 z-50 flex items-center justify-center opacity-0 transition duration-100",
+        "bg-moss/50 pointer-events-none fixed inset-0 z-50 flex items-center justify-center opacity-0 transition duration-100",
         {
-          "bg-moss/50 pointer-events-auto! opacity-100": isOpen,
+          "pointer-events-auto! opacity-100": isOpen,
         },
         className,
       )}

@@ -14,7 +14,8 @@ export function InputButton({
     <button
       type="button"
       className={classNames(
-        "flex h-11 grow items-center justify-center rounded border font-mono text-lg transition duration-100 hover:not-active:scale-110",
+        "flex h-11 grow items-center justify-center rounded border font-mono text-lg",
+        "transition duration-100 hover:not-active:scale-110",
         {
           "bg-seafoam/33 border-fern/30 text-evergreen hover:shadow-tile-inner hover:border-fern/50":
             !status,

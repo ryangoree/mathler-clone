@@ -32,7 +32,7 @@ export function useUpdateGameHistory() {
   });
 
   return {
-    updateGameHistory: gameHistory ? mutate : undefined,
+    updateGameHistory: mutate,
     updateGameHistoryStatus: status,
   };
 }

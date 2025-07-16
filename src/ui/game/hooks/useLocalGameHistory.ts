@@ -10,9 +10,9 @@ export const initialGameHistory: GameHistory = {
 };
 
 export function useLocalGameHistory() {
-  const { primaryWallet } = useDynamicContext();
+  const { user } = useDynamicContext();
   return useLocalStorage(
-    `gameHistory:${primaryWallet?.address || "local"}`,
+    `gameHistory:${user?.verifiedCredentials?.[0]?.address || "local"}`,
     initialGameHistory,
   );
 }
