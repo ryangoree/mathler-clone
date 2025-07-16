@@ -7,6 +7,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
+  base: process.env.VITE_BASE_PATH ?? "/",
   test: {
     environment: "jsdom",
     coverage: {
