@@ -1,6 +1,7 @@
 import classNames from "classnames";
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { XIcon } from "src/ui/base/icons/XIcon";
+import { findAllFocusable } from "src/ui/base/utils/findAllFocusable";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -18,29 +19,54 @@ export function Modal({
   actions,
   className,
 }: React.PropsWithChildren<ModalProps>) {
-  function handleClose(e: React.MouseEvent) {
-    if ("blur" in e.target && typeof e.target.blur === "function") {
-      e.target.blur();
-    }
-    onClose();
-  }
-
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent | React.KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    },
-    [onClose],
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    function handleKeyDown(event: KeyboardEvent | React.KeyboardEvent) {
+      switch (event.key) {
+        case "Escape":
+          onClose();
+          break;
+
+        // Focus trap
+        case "Tab": {
+          const container = containerRef.current;
+          if (!isOpen || !container) return;
+
+          const focusableElements = findAllFocusable(container);
+          if (!focusableElements || !focusableElements.length) return;
+
+          const firstElement = focusableElements[0]!;
+          const lastElement = focusableElements.at(-1)!;
+          const activeElement = document.activeElement;
+
+          if (!container.contains(activeElement)) {
+            firstElement.focus();
+            event.preventDefault();
+          } else if (event.shiftKey) {
+            if (activeElement === firstElement) {
+              lastElement.focus();
+              event.preventDefault();
+            }
+          } else if (activeElement === lastElement) {
+            firstElement.focus();
+            event.preventDefault();
+          }
+          break;
+        }
+      }
+    }
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+  }, [onClose, isOpen]);
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: non-focusable element
     <div
+      ref={containerRef}
       role="dialog"
       className={classNames(
         "bg-moss/50 pointer-events-none fixed inset-0 z-50 flex items-center justify-center opacity-0 transition duration-100",
@@ -49,11 +75,11 @@ export function Modal({
         },
         className,
       )}
-      onClick={handleClose}
-      onKeyDown={handleKeyDown}
+      onClick={onClose}
+      inert={!isOpen}
     >
-      {/** biome-ignore lint/a11y/useKeyWithClickEvents: stopping propagation */}
-      {/** biome-ignore lint/a11y/noStaticElementInteractions: stopping propagation */}
+      {/** biome-ignore lint/a11y/useKeyWithClickEvents: non-focusable element */}
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: required to stop propagation */}
       <div
         className={classNames(
           "mb-[10vh] w-full max-w-sm translate-y-6 scale-95 space-y-4 rounded-lg bg-(image:--bg) p-6 shadow-[2px_4px_20px_rgb(from_var(--color-moss)_r_g_b_/_0.2)] transition-all",
@@ -71,7 +97,7 @@ export function Modal({
             type="button"
             className="border-stone hover:shadow-tile-inner flex size-10 items-center justify-center rounded-full border p-1 transition duration-150 hover:scale-110"
             title="Close modal"
-            onClick={handleClose}
+            onClick={onClose}
           >
             <XIcon />
           </button>

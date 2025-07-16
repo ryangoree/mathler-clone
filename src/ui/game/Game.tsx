@@ -1,12 +1,13 @@
 import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
 import { parseFixed } from "@gud/math";
 import classNames from "classnames";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { usePulse } from "src/ui/base/hooks/usePulse";
 import { Modal } from "src/ui/base/Modal";
 import { Spinner } from "src/ui/base/Spinner";
+import { isFocusable } from "src/ui/base/utils/isFocusable";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
@@ -15,11 +16,11 @@ import type { InputStatus } from "src/ui/game/types";
 import { checkAnswer } from "src/ui/game/utils/checkAnswer";
 import { evaluate } from "src/utils/math";
 
+type GameStatus = "playing" | "invalid" | "won" | "lost";
 interface Attempt {
   answer: string;
   statuses: InputStatus[];
 }
-type GameStatus = "playing" | "invalid" | "won" | "lost";
 
 const maxAttempts = 6;
 const operators = ["+", "-", "*", "/"];
@@ -172,29 +173,45 @@ export function Game() {
   }
 
   // Keyboard listener
+  const gameContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Backspace") {
+        handleDelete();
+      }
+    }
+
+    function handleKeyPress(event: KeyboardEvent) {
       switch (event.key) {
-        case "Enter":
-          if (event.target === document.body) {
+        case "Enter": {
+          if (event.target === document.body || !isFocusable(event.target)) {
             handleSubmit();
+          } else if (gameContainerRef.current?.contains(event.target)) {
+            event.target.blur();
           }
           break;
-        case "Backspace":
-          handleDelete();
-          break;
+        }
+
         default:
           handleInput(event.key);
       }
     }
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keypress", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keypress", handleKeyPress);
+    };
   }, [handleSubmit, handleDelete, handleInput]);
 
   return (
     <>
       <div className="inline-flex">
-        <div className="flex shrink flex-col items-stretch gap-4">
+        <div
+          ref={gameContainerRef}
+          className="flex shrink flex-col items-stretch gap-4"
+        >
           <p className="text-h5 text-center">Find the hidden equation</p>
 
           {/* Input Rows */}

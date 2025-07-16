@@ -4,7 +4,7 @@ import {
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
 import { parseFixed } from "@gud/math";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { ProfileIcon } from "src/ui/base/icons/ProfileIcon";
@@ -17,9 +17,16 @@ export function ProfileButton() {
   const { handleLogOut } = useDynamicContext();
   const [wallet] = useUserWallets();
   const gameHistory = useGameHistory();
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleClose = () => {
+    setIsOpen(false);
+    buttonRef.current?.focus();
+  };
   return (
     <>
       <SecondaryButton
+        ref={buttonRef}
         onClick={() => setIsOpen(true)}
         className="text-caption! h-10!"
       >
@@ -29,7 +36,7 @@ export function ProfileButton() {
 
       <Modal
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={handleClose}
         title="Profile"
         actions={
           wallet?.address ? (
