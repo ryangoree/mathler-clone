@@ -206,7 +206,7 @@ export function Game() {
                 <div
                   key={`${rowIndex}:${values}`}
                   className={classNames("relative flex gap-1 rounded", {
-                    "animate-jump-pulse !transition-none":
+                    "animate-jump-pulse transition-none!":
                       isCurrentRow && isEarlySubmitWarningVisible,
                   })}
                 >

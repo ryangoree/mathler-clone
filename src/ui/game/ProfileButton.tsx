@@ -1,4 +1,6 @@
 import {
+  DynamicConnectButton,
+  DynamicUserProfile,
   useDynamicContext,
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
@@ -6,27 +8,55 @@ import { parseFixed } from "@gud/math";
 import { useState } from "react";
 import { ProfileIcon } from "src/ui/base/icons/ProfileIcon";
 import { Modal } from "src/ui/base/Modal";
+import { PrimaryButton } from "src/ui/base/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/SecondaryButton";
+import { formatAddress } from "src/ui/base/utils/formatAddress";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 
 export function ProfileButton() {
   const [isOpen, setIsOpen] = useState(false);
   const gameHistory = useGameHistory();
-  const { user } = useDynamicContext();
+  const { handleLogOut } = useDynamicContext();
   const [wallet] = useUserWallets();
   return (
     <>
       <SecondaryButton
         onClick={() => setIsOpen(true)}
-        className="!text-caption !h-10"
+        className="text-caption! h-10!"
       >
         <ProfileIcon />
         Profile
       </SecondaryButton>
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Profile">
-        {user && <h3>{user.alias || user.username || wallet?.address}</h3>}
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Profile"
+        actions={
+          wallet?.address ? (
+            <SecondaryButton className="w-full" onClick={() => handleLogOut()}>
+              Log out
+            </SecondaryButton>
+          ) : (
+            <DynamicConnectButton
+              buttonContainerClassName="w-full"
+              buttonClassName="w-full"
+            >
+              <PrimaryButton className="w-full">Log in</PrimaryButton>
+            </DynamicConnectButton>
+          )
+        }
+      >
+        <DynamicUserProfile />
         <ul className="border-stone flex flex-col gap-2 rounded border p-3">
+          {wallet?.address && (
+            <li className="flex items-center justify-between">
+              <span className="text-lichen text-h6">User:</span>
+              <span className="text-h6 font-bold">
+                {formatAddress(wallet.address)}
+              </span>
+            </li>
+          )}
           <li className="flex items-center justify-between">
             <span className="text-lichen">Games played:</span>
             <span className="text-h6 font-mono">

@@ -27,9 +27,9 @@ export function InputTile({
               },
             ]
           : {
-              "text-white !bg-fern": status === "correct",
-              "text-peat !bg-goldenrod": status === "present",
-              "!bg-dune": status === "absent",
+              "text-white bg-fern!": status === "correct",
+              "text-peat bg-goldenrod!": status === "present",
+              "bg-dune!": status === "absent",
               "shadow-tile-inner border-stone/75 border": !status,
               "opacity-50": !status || status === "absent",
             },

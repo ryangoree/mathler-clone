@@ -18,7 +18,7 @@ export function InputButton({
         {
           "bg-seafoam/33 border-fern/30 text-evergreen hover:shadow-tile-inner hover:border-fern/50":
             !status,
-          "bg-dune !scale-100 border-transparent opacity-50":
+          "bg-dune scale-100! border-transparent opacity-50":
             status === "absent",
           "bg-goldenrod border-olive/30 text-peat hover:shadow-tile-inner":
             status === "present",

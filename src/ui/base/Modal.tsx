@@ -47,7 +47,7 @@ export function Modal({
       className={classNames(
         "pointer-events-none fixed inset-0 z-50 flex items-center justify-center opacity-0 transition duration-100",
         {
-          "bg-moss/50 !pointer-events-auto opacity-100": isOpen,
+          "bg-moss/50 pointer-events-auto! opacity-100": isOpen,
         },
         className,
       )}
@@ -60,14 +60,14 @@ export function Modal({
         className={classNames(
           "mb-[10vh] w-full max-w-sm translate-y-6 scale-95 space-y-4 rounded-lg bg-(image:--bg) p-6 shadow-[2px_4px_20px_rgb(from_var(--color-moss)_r_g_b_/_0.2)] transition-all",
           {
-            "!translate-y-0 scale-100": isOpen,
+            "translate-y-0! scale-100": isOpen,
           },
         )}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <div className="flex gap-4">
+        <div className="mb-5 flex gap-4">
           <h2 className="text-h4 leading-h4 grow font-bold">{title}</h2>
           <button
             type="button"
@@ -80,7 +80,7 @@ export function Modal({
         </div>
         {children}
         {actions && (
-          <div className="mt-8 flex justify-end gap-2">{actions}</div>
+          <div className="mt-6 flex justify-end gap-2">{actions}</div>
         )}
       </div>
     </div>
