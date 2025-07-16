@@ -6,6 +6,7 @@ import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { usePulse } from "src/ui/base/hooks/usePulse";
 import { Modal } from "src/ui/base/Modal";
+import { Spinner } from "src/ui/base/Spinner";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
@@ -39,7 +40,7 @@ const initialEquationIndex = Math.floor(Math.random() * equations.length);
 export function Game() {
   // State
   const gameHistory = useGameHistory();
-  const { updateGameHistory } = useUpdateGameHistory();
+  const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
   const [targetEquation, setTargetEquation] = useState({
     index: initialEquationIndex,
     value: equations[initialEquationIndex]!,
@@ -92,7 +93,7 @@ export function Game() {
       return;
     }
 
-    // Update game status
+    // Win
     if (isCorrect) {
       setIsEndGameModalOpen(true);
       setGameStatus("won");
@@ -105,6 +106,8 @@ export function Game() {
       }));
       return;
     }
+
+    // Loss
     if (attempts.length >= maxAttempts - 1) {
       setIsEndGameModalOpen(true);
       setGameStatus("lost");
@@ -173,7 +176,9 @@ export function Game() {
     function handleKeyDown(event: KeyboardEvent) {
       switch (event.key) {
         case "Enter":
-          handleSubmit();
+          if (event.target === document.body) {
+            handleSubmit();
+          }
           break;
         case "Backspace":
           handleDelete();
@@ -363,34 +368,46 @@ export function Game() {
           </>
         )}
         {gameHistory && (
-          <ul className="border-stone flex flex-col gap-2 rounded border p-3">
-            <li className="flex items-center justify-between">
-              <span className="text-lichen">Games played:</span>
-              <span className="text-h6 font-mono">
-                {gameHistory.gamesPlayed}
-              </span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-lichen">Win %:</span>
-              <span className="text-h6 font-mono">
-                {parseFixed(gameHistory.gamesWon)
-                  .div(gameHistory.gamesPlayed || 1, 0)
-                  .format({ percent: true, decimals: 1 })}
-              </span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-lichen">Current Win Streak:</span>
-              <span className="text-h6 font-mono">
-                {gameHistory.currentWinStreak}
-              </span>
-            </li>
-            <li className="flex justify-between">
-              <span className="text-lichen">Best Win Streak:</span>
-              <span className="text-h6 font-mono">
-                {gameHistory.bestWinStreak}
-              </span>
-            </li>
-          </ul>
+          <div className="border-stone relative rounded border p-3">
+            {updateGameHistoryStatus === "pending" && (
+              <Spinner className="stroke-evergreen/50 absolute top-0 right-0 bottom-0 left-0 z-50 m-auto" />
+            )}
+            <ul
+              className={classNames(
+                "flex flex-col gap-2 transition duration-100",
+                {
+                  "[&>*]:opacity-10": updateGameHistoryStatus === "pending",
+                },
+              )}
+            >
+              <li className="flex items-center justify-between">
+                <span className="text-lichen">Games played:</span>
+                <span className="text-h6 font-mono">
+                  {gameHistory.gamesPlayed}
+                </span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-lichen">Win %:</span>
+                <span className="text-h6 font-mono">
+                  {parseFixed(gameHistory.gamesWon)
+                    .div(gameHistory.gamesPlayed || 1, 0)
+                    .format({ percent: true, decimals: 1 })}
+                </span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-lichen">Current Win Streak:</span>
+                <span className="text-h6 font-mono">
+                  {gameHistory.currentWinStreak}
+                </span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-lichen">Best Win Streak:</span>
+                <span className="text-h6 font-mono">
+                  {gameHistory.bestWinStreak}
+                </span>
+              </li>
+            </ul>
+          </div>
         )}
       </Modal>
     </>

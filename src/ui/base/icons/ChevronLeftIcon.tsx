@@ -3,8 +3,8 @@ import type { IconProps } from "src/ui/base/icons/types";
 export function ChevronLeftIcon({ title, ...props }: IconProps) {
   return (
     <svg
-      width="7"
-      height="13"
+      width={7}
+      height={13}
       viewBox="0 0 7 13"
       fill="none"
       stroke="currentColor"

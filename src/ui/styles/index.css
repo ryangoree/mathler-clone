@@ -54,9 +54,9 @@
   --ease-out-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Animation */
+
   --animate-jump-pulse:
     jump 400ms var(--ease-out-bounce), ring-pulse 800ms var(--ease-out-quart);
-
   @keyframes jump {
     50% {
       transform: scale(1.05) translate(0, -4px);
@@ -72,6 +72,30 @@
     100% {
       outline: 1px solid transparent;
       outline-offset: 20px;
+    }
+  }
+
+  --spinner-duration: 1333ms;
+  --animate-spinner-outer: rotator calc(var(--spinner-duration) * 2) linear
+    infinite;
+  --animate-spinner-inner: dash var(--spinner-duration) ease-in-out infinite;
+  @keyframes rotator {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes dash {
+    0% {
+      stroke-dashoffset: 125;
+      transform: rotate(-90deg);
+    }
+    50% {
+      stroke-dashoffset: 32.25px;
+      transform: rotate(0deg);
+    }
+    100% {
+      stroke-dashoffset: 125;
+      transform: rotate(270deg);
     }
   }
 }
