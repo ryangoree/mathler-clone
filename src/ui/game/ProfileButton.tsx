@@ -3,26 +3,24 @@ import {
   useDynamicContext,
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
-import { parseFixed } from "@gud/math";
 import { useRef, useState } from "react";
 import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { ProfileIcon } from "src/ui/base/icons/ProfileIcon";
 import { Modal } from "src/ui/base/Modal";
-import { formatAddress } from "src/ui/base/utils/formatAddress";
-import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
+import { ProfileStats } from "src/ui/game/ProfileStats";
 
 export function ProfileButton() {
   const [isOpen, setIsOpen] = useState(false);
   const { handleLogOut } = useDynamicContext();
   const [wallet] = useUserWallets();
-  const { gameHistory } = useGameHistory();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleClose = () => {
     setIsOpen(false);
     buttonRef.current?.focus();
   };
+
   return (
     <>
       <SecondaryButton
@@ -55,42 +53,7 @@ export function ProfileButton() {
           )
         }
       >
-        <ul className="border-stone flex flex-col gap-2 rounded border p-3">
-          {wallet?.address && (
-            <li className="flex items-center justify-between">
-              <span className="text-lichen text-h6">User:</span>
-              <span className="text-h6 font-bold">
-                {formatAddress(wallet.address)}
-              </span>
-            </li>
-          )}
-          <li className="flex items-center justify-between">
-            <span className="text-lichen">Games played:</span>
-            <span className="text-h6 font-mono">
-              {gameHistory?.gamesPlayed}
-            </span>
-          </li>
-          <li className="flex items-center justify-between">
-            <span className="text-lichen">Win %:</span>
-            <span className="text-h6 font-mono">
-              {parseFixed(gameHistory?.gamesWon)
-                .div(gameHistory?.gamesPlayed || 1, 0)
-                .format({ percent: true, decimals: 1 })}
-            </span>
-          </li>
-          <li className="flex items-center justify-between">
-            <span className="text-lichen">Current Win Streak:</span>
-            <span className="text-h6 font-mono">
-              {gameHistory?.currentWinStreak}
-            </span>
-          </li>
-          <li className="flex justify-between">
-            <span className="text-lichen">Best Win Streak:</span>
-            <span className="text-h6 font-mono">
-              {gameHistory?.bestWinStreak}
-            </span>
-          </li>
-        </ul>
+        <ProfileStats />
       </Modal>
     </>
   );

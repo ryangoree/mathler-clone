@@ -1,5 +1,4 @@
 import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
-import { parseFixed } from "@gud/math";
 import classNames from "classnames";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
@@ -11,6 +10,7 @@ import { isFocusable } from "src/ui/base/utils/isFocusable";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
 import { InputTileRow } from "src/ui/game/InputTileRow";
+import { ProfileStats } from "src/ui/game/ProfileStats";
 import type { InputStatus } from "src/ui/game/types";
 import { checkAnswer } from "src/ui/game/utils/checkAnswer";
 import { evaluate } from "src/utils/math";
@@ -362,45 +362,15 @@ export function Game() {
           </>
         )}
         {gameHistory && (
-          <div className="border-stone relative rounded border p-3">
+          <div className="relative">
             {updateGameHistoryStatus === "pending" && (
               <Spinner className="stroke-evergreen/50 absolute top-0 right-0 bottom-0 left-0 z-50 m-auto" />
             )}
-            <ul
-              className={classNames(
-                "flex flex-col gap-2 transition duration-100",
-                {
-                  "[&>*]:opacity-10": updateGameHistoryStatus === "pending",
-                },
-              )}
-            >
-              <li className="flex items-center justify-between">
-                <span className="text-lichen">Games played:</span>
-                <span className="text-h6 font-mono">
-                  {gameHistory.gamesPlayed}
-                </span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-lichen">Win %:</span>
-                <span className="text-h6 font-mono">
-                  {parseFixed(gameHistory.gamesWon)
-                    .div(gameHistory.gamesPlayed || 1, 0)
-                    .format({ percent: true, decimals: 1 })}
-                </span>
-              </li>
-              <li className="flex items-center justify-between">
-                <span className="text-lichen">Current Win Streak:</span>
-                <span className="text-h6 font-mono">
-                  {gameHistory.currentWinStreak}
-                </span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-lichen">Best Win Streak:</span>
-                <span className="text-h6 font-mono">
-                  {gameHistory.bestWinStreak}
-                </span>
-              </li>
-            </ul>
+            <ProfileStats
+              className={classNames("transition duration-100", {
+                "[&>*]:opacity-10": updateGameHistoryStatus === "pending",
+              })}
+            />
           </div>
         )}
       </Modal>
