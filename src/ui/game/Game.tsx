@@ -96,8 +96,8 @@ export function Game() {
 
     // Win
     if (isCorrect) {
-      setIsEndGameModalOpen(true);
       setGameStatus("won");
+      setIsEndGameModalOpen(true);
       updateGameHistory((prev) => ({
         ...prev,
         gamesPlayed: prev.gamesPlayed + 1,
@@ -110,8 +110,8 @@ export function Game() {
 
     // Loss
     if (attempts.length >= maxAttempts - 1) {
-      setIsEndGameModalOpen(true);
       setGameStatus("lost");
+      setIsEndGameModalOpen(true);
       updateGameHistory((prev) => ({
         ...prev,
         gamesPlayed: prev.gamesPlayed + 1,
@@ -125,7 +125,7 @@ export function Game() {
       ...prev,
       {
         answer: currentAnswer,
-        statuses: statuses,
+        statuses,
       },
     ]);
     setCurrentAnswer("");
