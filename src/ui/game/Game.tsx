@@ -1,9 +1,9 @@
-import { ChevronLeftIcon } from "@dynamic-labs/sdk-react-core";
 import classNames from "classnames";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
 import { SecondaryButton } from "src/ui/base/buttons/SecondaryButton";
 import { usePulse } from "src/ui/base/hooks/usePulse";
+import { ChevronLeftIcon } from "src/ui/base/icons/ChevronLeftIcon";
 import { Modal } from "src/ui/base/Modal";
 import { Spinner } from "src/ui/base/Spinner";
 import { isFocusable } from "src/ui/base/utils/isFocusable";
@@ -275,7 +275,7 @@ export function Game() {
                 type="button"
                 className={classNames(
                   "text-terracotta bg-blush/33 border-ash-rose/30 flex h-11 items-center justify-center gap-2 rounded border pr-3 pl-4",
-                  "hover:shadow-tile-inner transition-all duration-100 hover:not-active:scale-105",
+                  "hover:shadow-tile-inner transition-all duration-100 hover:not-active:scale-[1.08]",
                 )}
                 onClick={handleDelete}
                 title="Delete last input"
