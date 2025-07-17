@@ -34,7 +34,11 @@ export function Modal({
           if (!isOpen || !container) return;
 
           const focusableElements = findAllFocusable(container);
-          if (!focusableElements || !focusableElements.length) return;
+
+          if (!focusableElements || !focusableElements.length) {
+            event.preventDefault();
+            return;
+          }
 
           const firstElement = focusableElements[0]!;
           const lastElement = focusableElements.at(-1)!;
