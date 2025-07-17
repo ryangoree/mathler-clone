@@ -51,8 +51,8 @@ export function checkAnswer({
     isEqual,
     isCorrect,
     statuses: isCorrect
-      ? // Overwrite "present" statuses in cumulative solutions
-        Array.from({ length: answer.length }, () => "correct")
+      ? // Mark all as "correct" in cumulative solutions
+        Array(answer.length).fill("correct")
       : exactStatuses,
   };
 }
