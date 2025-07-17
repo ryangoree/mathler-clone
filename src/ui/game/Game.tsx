@@ -9,7 +9,6 @@ import { Modal } from "src/ui/base/Modal";
 import { Spinner } from "src/ui/base/Spinner";
 import { isFocusable } from "src/ui/base/utils/isFocusable";
 import { useGameHistory } from "src/ui/game/hooks/useGameHistory";
-import { useUpdateGameHistory } from "src/ui/game/hooks/useUpdateGameHistory";
 import { InputButton } from "src/ui/game/InputButton";
 import { InputTileRow } from "src/ui/game/InputTileRow";
 import type { InputStatus } from "src/ui/game/types";
@@ -40,8 +39,8 @@ const initialEquationIndex = Math.floor(Math.random() * equations.length);
 
 export function Game() {
   // State
-  const gameHistory = useGameHistory();
-  const { updateGameHistory, updateGameHistoryStatus } = useUpdateGameHistory();
+  const { gameHistory, updateGameHistory, updateGameHistoryStatus } =
+    useGameHistory();
   const [targetEquation, setTargetEquation] = useState({
     index: initialEquationIndex,
     value: equations[initialEquationIndex]!,

@@ -2,14 +2,40 @@ import {
   useDynamicContext,
   useUserUpdateRequest,
 } from "@dynamic-labs/sdk-react-core";
+import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useLocalGameHistory } from "src/ui/game/hooks/useLocalGameHistory";
+import { useLocalStorage } from "src/ui/base/hooks/useLocalStorage";
+import type { UpdateValue } from "src/ui/base/types";
 import type { GameHistory } from "src/ui/game/types";
+
+export const initialGameHistory: GameHistory = {
+  gamesPlayed: 0,
+  gamesWon: 0,
+  currentWinStreak: 0,
+  bestWinStreak: 0,
+};
 
 export function useGameHistory() {
   const { user } = useDynamicContext();
   const { updateUser } = useUserUpdateRequest();
-  const [gameHistory, setGameHistory] = useLocalGameHistory();
+  const [gameHistory, setGameHistory] = useLocalStorage(
+    `gameHistory:${user?.verifiedCredentials?.[0]?.address || "local"}`,
+    initialGameHistory,
+  );
+
+  const { mutate, status } = useMutation({
+    mutationKey: ["updateGameHistory"],
+    mutationFn: async (newGameHistory: UpdateValue<GameHistory>) => {
+      const updatedGameHistory =
+        typeof newGameHistory === "function"
+          ? newGameHistory(gameHistory)
+          : { ...gameHistory, ...newGameHistory };
+
+      return user
+        ? updateUser({ metadata: updatedGameHistory })
+        : setGameHistory(updatedGameHistory);
+    },
+  });
 
   useEffect(() => {
     if (!user) return;
@@ -23,5 +49,9 @@ export function useGameHistory() {
     }
   }, [user, gameHistory, setGameHistory, updateUser]);
 
-  return gameHistory;
+  return {
+    gameHistory,
+    updateGameHistory: mutate,
+    updateGameHistoryStatus: status,
+  };
 }

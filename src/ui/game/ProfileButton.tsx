@@ -16,7 +16,7 @@ export function ProfileButton() {
   const [isOpen, setIsOpen] = useState(false);
   const { handleLogOut } = useDynamicContext();
   const [wallet] = useUserWallets();
-  const gameHistory = useGameHistory();
+  const { gameHistory } = useGameHistory();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleClose = () => {
