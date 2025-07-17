@@ -1,7 +1,7 @@
 import {
   DynamicConnectButton,
   useDynamicContext,
-  useUserWallets,
+  useIsLoggedIn,
 } from "@dynamic-labs/sdk-react-core";
 import { useRef, useState } from "react";
 import { PrimaryButton } from "src/ui/base/buttons/PrimaryButton";
@@ -13,7 +13,7 @@ import { ProfileStats } from "src/ui/game/ProfileStats";
 export function ProfileButton() {
   const [isOpen, setIsOpen] = useState(false);
   const { handleLogOut } = useDynamicContext();
-  const [wallet] = useUserWallets();
+  const isLoggedIn = useIsLoggedIn();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const handleClose = () => {
@@ -37,7 +37,7 @@ export function ProfileButton() {
         onClose={handleClose}
         title="Profile"
         actions={
-          wallet?.address ? (
+          isLoggedIn ? (
             <SecondaryButton className="w-full" onClick={() => handleLogOut()}>
               Log out
             </SecondaryButton>
