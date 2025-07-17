@@ -5,7 +5,7 @@ export function App() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header */}
-      <div className="flex w-full px-6 py-4 justify-between">
+      <div className="flex w-full justify-between px-6 py-4">
         <h1 className="text-h6 font-bold">Mathler</h1>
         <ProfileButton />
       </div>

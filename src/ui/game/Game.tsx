@@ -213,8 +213,8 @@ export function Game() {
         >
           <div className="text-h5 text-center">
             <p>Find the hidden equation</p>
-            <p className="md:hidden font-mono">
-              <span className="bg-dune/50 border border-stone/80 rounded px-3">
+            <p className="font-mono md:hidden">
+              <span className="bg-dune/50 border-stone/80 rounded border px-3">
                 ?
               </span>{" "}
               = <span>{expectedResult}</span>

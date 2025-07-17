@@ -17,7 +17,7 @@ export function InputTile({
   return (
     <div
       className={classNames(
-        "flex h-11 w-14 items-center justify-center rounded font-mono text-lg font-bold bg-white/33",
+        "flex h-11 w-14 items-center justify-center rounded bg-white/33 font-mono text-lg font-bold",
         active
           ? [
               "shadow-tile",
@@ -27,7 +27,7 @@ export function InputTile({
               },
             ]
           : {
-              "text-white bg-fern!": status === "correct",
+              "bg-fern! text-white": status === "correct",
               "text-peat bg-goldenrod!": status === "present",
               "bg-dune!": status === "absent",
               "shadow-tile-inner border-stone/75 border": !status,

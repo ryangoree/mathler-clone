@@ -69,7 +69,7 @@ describe("evaluate", () => {
     );
   });
 
-  it("evaluated bitwise operators", () => {
+  it("evaluates bitwise operators", () => {
     expect(evaluate("9 | 26")).toBe(9 | 26);
     expect(evaluate("9 ^ 26")).toBe(9 ^ 26);
     expect(evaluate("9 & 26")).toBe(9 & 26);

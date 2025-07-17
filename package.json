@@ -11,6 +11,7 @@
     "test:watch": "vitest --reporter=verbose",
     "coverage": "vitest run --coverage",
     "format": "biome format --write",
+    "format:prettier": "prettier . --write",
     "lint": "biome lint --diagnostic-level error .",
     "lint:fix": "npm run lint --fix",
     "lint:fix:unsafe": "npm run lint:fix --unsafe",
