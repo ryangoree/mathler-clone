@@ -18,6 +18,6 @@ as visible in my recent work.
 ## Design
 
 I started the design in Figma, aiming for something clean and peaceful, and
-finished the details in code with extra attention to the details.
+finished the rest in code with extra attention to the details.
 
 ![Figma Screenshot](./public/figma.png)
